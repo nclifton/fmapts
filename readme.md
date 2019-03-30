@@ -12,8 +12,7 @@ as a full-stack developer.
 ## Task
 Build a single page application that uses data provided from the
 
-[ATDW Atlas API](http://developer.atdw.com.au/ATLAS/API/ATDWO-
-atlas.html) to list
+[ATDW Atlas API](http://developer.atdw.com.au/ATLAS/API/ATDWO-atlas.html) to list
 
 accommodation options in New South Wales. Using the service you
 develop the frontend
@@ -34,8 +33,7 @@ A minimum of two filters are required:
 ### Data source
 * Data can be called using the methods defined at
 
-[ATDW Atlas API](http://developer.atdw.com.au/ATLAS/API/ATDWO-
-atlas.html).
+[ATDW Atlas API](http://developer.atdw.com.au/ATLAS/API/ATDWO-atlas.html).
 
 All documentation can be found via this link.
 * For development the API key is: `123456789101112`
