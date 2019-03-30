@@ -15,7 +15,7 @@ class ProductsTest extends TestCase
      */
     public function testAll()
     {
-        $response = $this->getJson('/api/products');
+        $response = $this->getJson('/api/products?st=NSW');
 
         $response->assertStatus(200);
 

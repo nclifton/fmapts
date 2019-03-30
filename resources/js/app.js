@@ -15,8 +15,10 @@ window.axios.defaults.headers.common = {
 };
 
 import BootstrapVue from 'bootstrap-vue'
+import {loadProgressBar} from 'axios-progress-bar';
 
 Vue.use(BootstrapVue);
+loadProgressBar();
 
 Vue.mixin({
     methods: {

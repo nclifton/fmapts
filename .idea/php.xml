@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BladeDebugConfiguration">
+    <cachePath>$PROJECT_DIR$/storage/framework/views</cachePath>
+  </component>
   <component name="PhpIncludePathManager">
     <include_path>
       <path value="$PROJECT_DIR$/vendor/dnoegel/php-xdg-base-dir" />
@@ -184,5 +187,8 @@
     <phpunit_settings>
       <phpunit_by_interpreter interpreter_id="f45d8e7a-fb3a-484f-9977-3d99592b3fd0" load_method="CUSTOM_LOADER" custom_loader_path="/var/www/fmapts/vendor/autoload.php" phpunit_phar_path="" />
     </phpunit_settings>
+  </component>
+  <component name="TwigDebugConfiguration">
+    <cachePath />
   </component>
 </project>

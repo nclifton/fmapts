@@ -1,7 +1,9 @@
 <?php
 
-use App\Http\Resources\Product;
-use App\Product as ProductModel;
+use App\Area;
+use App\Http\Resources;
+use App\Product;
+use App\Region;
 use Illuminate\Http\Request;
 
 /*
@@ -15,15 +17,23 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('all',function(Request $request,$page=0){
+Route::get('products',function(Request $request){
 
-    $all = ProductModel::all();
-    $resource  = Product::collection($all);
-
-    return $resource;
-
+    return Resources\Product::collection(Product::all($request->query->all()));
 
 })->name('products');
+
+Route::get('areas',function(Request $request){
+
+    return Resources\Area::collection(Area::all($request->query->all()));
+
+})->name('areas');
+
+Route::get('regions',function(Request $request){
+
+    return Resources\Region::collection(Region::all($request->query->all()));
+
+})->name('regions');
 
 
 

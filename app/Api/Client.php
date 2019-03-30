@@ -54,8 +54,12 @@ class Client
             case 'products':
                 $api = new Endpoints\Products($this);
                 break;
-
-//todo define the other endpoints we'll need here
+            case 'areas':
+                $api = new Endpoints\Areas($this);
+                break;
+            case 'regions':
+                $api = new Endpoints\Regions($this);
+                break;
 
             default:
                 throw new InvalidArgumentException(sprintf('Undefined api instance called: "%s"', $name));
@@ -83,13 +87,15 @@ class Client
         }
     }
 
-    public function get($uri)
+    public function get($uri,array $query=[])
     {
+
         try {
             $response = $this->httpClient->request('GET',$uri,[
                 'headers' => [
                     'Accept' => 'application/json'
-                ]
+                ],
+                'query' => $query
             ]);
             $status = $response->getStatusCode();
             $body = $response->getBody()->getContents();

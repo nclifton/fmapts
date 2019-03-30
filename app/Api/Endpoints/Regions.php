@@ -4,7 +4,7 @@ namespace App\Api\Endpoints;
 
 use App\Api\Client;
 
-class Products implements ApiInterface
+class Regions implements ApiInterface
 {
     /**
      * The client.
@@ -13,7 +13,6 @@ class Products implements ApiInterface
      */
     protected $client;
 
-    const DEFAULT_PER_PAGE = 10;
 
     /**
      * Search constructor.
@@ -32,26 +31,19 @@ class Products implements ApiInterface
             'out' => 'json'
         ], $params);
 
-        $page = request('page');
-        if ($page){
-            $params['pge'] = $page;
-        }
-
-        \Log::debug('products with params: '.json_encode($params));
-
         $response = $this->client->get(
-            "https://atlas.atdw-online.com.au/api/atlas/products", $params);
+            "https://atlas.atdw-online.com.au/api/atlas/regions", $params);
 
         return [
             'pagination' => [
-                'per_page' => self::DEFAULT_PER_PAGE,
-                'total'    => $response->numberOfResults ?? 0
+                'per_page' => count($response),
+                'total'    => count($response)
             ],
-            'items'      => array_map(function ($item) {
-                return (array)$item;
-            }, $response->products ?? [])
+            'items' => array_map(
+                function ($item) {
+                    return (array)$item;
+                }, $response ?? [])
         ];
-
     }
 
 

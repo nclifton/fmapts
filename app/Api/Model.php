@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\App\Api;
+namespace App\Api;
 
 use App\Product;
 use Torann\RemoteModel\Model as RemoteModel;
@@ -25,4 +25,7 @@ class Model extends RemoteModel
 
         return app('events')->$method($event, $this);
     }
+
+
+
 }
