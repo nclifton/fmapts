@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="ee05145b-d756-4389-a98f-2979460cc046" name="laravel" url="http://fmapts">
+        <fileTransfer host="laravel" port="2222" privateKey="$PROJECT_DIR$/../laradock/workspace/insecure_id_rsa" accessType="SFTP" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+          <option name="port" value="2222" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
