@@ -14,6 +14,12 @@ class Product extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        $array = parent::toArray($request);
+
+        array_merge($array,[
+            'url' => route('product',['product'=>$this->productId])
+        ]);
+
+        return $array;
     }
 }

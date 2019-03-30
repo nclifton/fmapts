@@ -2515,11 +2515,67 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "MainComponent",
   data: function data() {
     return {
       products: [],
+      product: {
+        productName: null,
+        multimedia: [{
+          serverPath: null,
+          altText: null
+        }],
+        addresses: [],
+        productDescription: null
+      },
+      showProduct: false,
       meta: [],
       filter: {
         st: 'NSW',
@@ -2527,8 +2583,6 @@ __webpack_require__.r(__webpack_exports__);
         ar: null,
         rg: null
       },
-      region: null,
-      area: null,
       areaOptions: [],
       regionOptions: [],
       regionOrArea: 'rg'
@@ -2543,26 +2597,26 @@ __webpack_require__.r(__webpack_exports__);
     getProducts: function getProducts() {
       var _this = this;
 
-      this.filter.rg = this.regionOrArea === 'rg' ? this.region : null;
-      this.filter.ar = this.regionOrArea === 'ar' ? this.area : null;
-
+      // if the selection is one of the ones that switch the select, switch the visible select.
       if (this.filter.rg === 'ar') {
-        this.area = null;
-        this.regionOrArea = 'ar';
-        return;
+        // switch to area selection
+        this.switchFilter('ar');
+      } else if (this.filter.ar === 'rg') {
+        // switch to region selection
+        this.switchFilter('rg');
+      } else {
+        // an area or a region (or neither) has been selected, load the products.
+        axios.get(route('products', this.filter)).then(function (response) {
+          return _this.displayProducts(response);
+        }).catch(function (errors) {
+          return _this.handleErrors(errors);
+        });
       }
-
-      if (this.filter.ar === 'rg') {
-        this.region = null;
-        this.regionOrArea = 'rg';
-        return;
-      }
-
-      axios.get(route('products', this.filter)).then(function (response) {
-        return _this.displayProducts(response);
-      }).catch(function (errors) {
-        return _this.handleErrors(errors);
-      });
+    },
+    switchFilter: function switchFilter(filter) {
+      this.filter.rg = null;
+      this.filter.ar = null;
+      this.regionOrArea = filter;
     },
     handleErrors: function handleErrors(errors) {
       console.log(errors);
@@ -2583,7 +2637,8 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     setAreaOptions: function setAreaOptions(areas) {
-      this.areaOptions = areas;
+      this.areaOptions = areas; // prepend the unselected and the switch selection options
+
       this.areaOptions.unshift({
         value: null,
         text: 'SELECT AREA'
@@ -2604,7 +2659,8 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     setRegionOptions: function setRegionOptions(regions) {
-      this.regionOptions = regions;
+      this.regionOptions = regions; // prepend the unselected and the switch selection options
+
       this.regionOptions.unshift({
         value: null,
         text: 'SELECT REGION'
@@ -2612,6 +2668,26 @@ __webpack_require__.r(__webpack_exports__);
         value: 'ar',
         text: 'SELECT AREA'
       });
+    },
+    loadProduct: function loadProduct(item) {
+      var _this4 = this;
+
+      // only request it if we don't already have it
+      if (item.productId !== this.product.productId) {
+        axios.get(route('product', {
+          product: item.productId
+        })).then(function (response) {
+          _this4.product = response.data.data;
+          _this4.showProduct = true;
+        }).catch(function (errors) {
+          return handleErrors(errors);
+        });
+      } else {
+        this.showProduct = true;
+      }
+    },
+    hideProduct: function hideProduct() {
+      this.showProduct = false;
     }
   }
 });
@@ -30078,7 +30154,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".card.product[data-v-3ee370e9] {\n  max-width: 30em;\n}", ""]);
+exports.push([module.i, ".card.product[data-v-3ee370e9] {\n  max-width: 30em;\n}\n.products .card.product[data-v-3ee370e9]:hover {\n  box-shadow: 0 0 2px 2px #000;\n  cursor: pointer;\n}", ""]);
 
 // exports
 
@@ -61351,52 +61427,65 @@ var render = function() {
                     "b-navbar-nav",
                     { staticClass: "ml-auto" },
                     [
-                      _c(
-                        "b-nav-form",
-                        [
-                          _c("b-form-select", {
-                            directives: [
-                              {
-                                name: "show",
-                                rawName: "v-show",
-                                value: _vm.regionOrArea === "ar",
-                                expression: "regionOrArea==='ar'"
-                              }
-                            ],
-                            staticClass: "mr-sm-2",
-                            attrs: { options: _vm.areaOptions, size: "sm" },
-                            on: { change: _vm.getProducts },
-                            model: {
-                              value: _vm.area,
-                              callback: function($$v) {
-                                _vm.area = $$v
-                              },
-                              expression: "area"
-                            }
-                          }),
-                          _vm._v(" "),
-                          _c("b-form-select", {
-                            directives: [
-                              {
-                                name: "show",
-                                rawName: "v-show",
-                                value: _vm.regionOrArea === "rg",
-                                expression: "regionOrArea==='rg'"
-                              }
-                            ],
-                            staticClass: "mr-sm-2",
-                            attrs: { options: _vm.regionOptions, size: "sm" },
-                            on: { change: _vm.getProducts },
-                            model: {
-                              value: _vm.region,
-                              callback: function($$v) {
-                                _vm.region = $$v
-                              },
-                              expression: "region"
-                            }
-                          })
+                      _c("b-form-select", {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value:
+                              !_vm.showProduct && _vm.regionOrArea === "ar",
+                            expression: "!showProduct && regionOrArea==='ar'"
+                          }
                         ],
-                        1
+                        staticClass: "mr-sm-2",
+                        attrs: { options: _vm.areaOptions, size: "sm" },
+                        on: { change: _vm.getProducts },
+                        model: {
+                          value: _vm.filter.ar,
+                          callback: function($$v) {
+                            _vm.$set(_vm.filter, "ar", $$v)
+                          },
+                          expression: "filter.ar"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("b-form-select", {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value:
+                              !_vm.showProduct && _vm.regionOrArea === "rg",
+                            expression: "!showProduct && regionOrArea==='rg'"
+                          }
+                        ],
+                        staticClass: "mr-sm-2",
+                        attrs: { options: _vm.regionOptions, size: "sm" },
+                        on: { change: _vm.getProducts },
+                        model: {
+                          value: _vm.filter.rg,
+                          callback: function($$v) {
+                            _vm.$set(_vm.filter, "rg", $$v)
+                          },
+                          expression: "filter.rg"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "b-btn",
+                        {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value: _vm.showProduct,
+                              expression: "showProduct"
+                            }
+                          ],
+                          attrs: { variant: "light", type: "button" },
+                          on: { click: _vm.hideProduct }
+                        },
+                        [_vm._v("BACK")]
                       )
                     ],
                     1
@@ -61411,10 +61500,20 @@ var render = function() {
         1
       ),
       _vm._v(" "),
-      _c("b-container", { staticClass: "mt-4" }, [
+      _c("b-container", { staticClass: "mt-5 pt-2" }, [
         _c(
           "div",
-          { staticClass: "products" },
+          {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: !_vm.showProduct,
+                expression: "!showProduct"
+              }
+            ],
+            staticClass: "products"
+          },
           _vm._l(_vm.products, function(product) {
             return _c(
               "b-card",
@@ -61427,6 +61526,11 @@ var render = function() {
                   "img-alt": "Image",
                   "img-top": "",
                   tag: "article"
+                },
+                on: {
+                  click: function($event) {
+                    return _vm.loadProduct(product)
+                  }
                 }
               },
               [
@@ -61577,6 +61681,173 @@ var render = function() {
               1
             )
           }),
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: _vm.showProduct,
+                expression: "showProduct"
+              }
+            ],
+            staticClass: "product"
+          },
+          [
+            _c(
+              "b-card",
+              {
+                staticClass: "product",
+                attrs: {
+                  title: _vm.product.productName,
+                  "img-src": _vm.product.multimedia[0].serverPath,
+                  "img-alt": _vm.product.multimedia[0].altText,
+                  "img-top": "",
+                  tag: "article"
+                }
+              },
+              [
+                _c(
+                  "b-card-text",
+                  [
+                    _vm._l(_vm.product.addresses, function(address, key) {
+                      return _c(
+                        "div",
+                        {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value: address.attributeIdAddress === "PHYSICAL",
+                              expression:
+                                "address.attributeIdAddress==='PHYSICAL'"
+                            }
+                          ],
+                          key: key,
+                          staticClass: "address"
+                        },
+                        [
+                          _c("div", { staticClass: "address-line" }, [
+                            _vm._v(
+                              "\n                            " +
+                                _vm._s(address.addressLine1) +
+                                "\n                        "
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: address.addressLine2.length > 0,
+                                  expression: "address.addressLine2.length > 0"
+                                }
+                              ],
+                              staticClass: "address-line2"
+                            },
+                            [
+                              _vm._v(
+                                "\n                            " +
+                                  _vm._s(address.addressLine2) +
+                                  "\n                        "
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            {
+                              staticClass:
+                                "address-city-state-postcode d-flex flex-row flex-wrap"
+                            },
+                            [
+                              _c("div", { staticClass: "address-city mr-1" }, [
+                                _vm._v(_vm._s(address.cityName))
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "address-state mr-1" }, [
+                                _vm._v(_vm._s(address.stateName))
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "address-postcode" }, [
+                                _vm._v(_vm._s(address.addressPostalCode))
+                              ])
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            {
+                              staticClass:
+                                "address-area d-flex flex-row flex-wrap"
+                            },
+                            [
+                              _c("div", { staticClass: "mr-3" }, [
+                                _vm._v("Area:")
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "mr-1" }, [
+                                _vm._v(
+                                  "\n                                " +
+                                    _vm._s(address.areaName) +
+                                    "\n                            "
+                                )
+                              ])
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            {
+                              staticClass:
+                                "address-region d-flex flex-row flex-wrap"
+                            },
+                            [
+                              _c("div", { staticClass: "mr-3" }, [
+                                _vm._v("Region")
+                              ]),
+                              _vm._v(" "),
+                              _vm._l(
+                                address.productAddressDomesticRegionRelationship,
+                                function(region, i) {
+                                  return _c(
+                                    "div",
+                                    { key: i, staticClass: "mr-1" },
+                                    [
+                                      _vm._v(
+                                        "\n                                " +
+                                          _vm._s(region.domesticRegionName) +
+                                          "\n                            "
+                                      )
+                                    ]
+                                  )
+                                }
+                              )
+                            ],
+                            2
+                          )
+                        ]
+                      )
+                    }),
+                    _vm._v(
+                      "\n                    " +
+                        _vm._s(_vm.product.productDescription) +
+                        "\n                "
+                    )
+                  ],
+                  2
+                )
+              ],
+              1
+            )
+          ],
           1
         )
       ])

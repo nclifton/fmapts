@@ -23,4 +23,12 @@ class ProductsTest extends TestCase
 
         $response->assertJsonCount(10, 'data');
     }
+
+    public function testProductRouteBinding()
+    {
+        $response = $this->getJson('/api/product/5bac22d4cd8d68ad0493af71');
+
+        $response->assertStatus(200);
+    }
+
 }

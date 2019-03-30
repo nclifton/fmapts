@@ -35,5 +35,11 @@ Route::get('regions',function(Request $request){
 
 })->name('regions');
 
+Route::get('product/{product}',function(Product $product){
+ // see provider
+    return Resources\Product::make($product);
+
+})->name('product');
+
 
 

@@ -54,5 +54,22 @@ class Products implements ApiInterface
 
     }
 
+    public function find($productId)
+    {
+        $params = [
+            'key' => config('atlas.key', '123456789101112'),
+            'productId' => $productId,
+            'out' => 'json',
+        ];
+
+        \Log::debug('product with id: '.$productId);
+
+        $response = $this->client->get(
+            "https://atlas.atdw-online.com.au/api/atlas/product", $params);
+
+        return $response;
+
+    }
+
 
 }
