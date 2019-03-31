@@ -5,7 +5,6 @@
 fmapts is a web application that uses the Laravel framework and Vue.js.
 I built it as a "tech-test". see [below][Full Stack Lead Developer Test]
 
-
 fmapts is open-source software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
 ## Installation 
@@ -42,6 +41,10 @@ I see no Fat Controller here (toot toot!).
 Instead of using a controller I've just put the little bit of stuff there is in the route file  `routes/api.php`
 And also using a bit of route URI segment binding for the product selection in `app/Providers/RouteServiceProvider.php`.
 
+## Remote Model
+Uses the Remote Model ORM package (https://github.com/Torann/remote-model) to provide a neat way to encapsulate the 
+ATLAS API interfaces in the Product, Area and Region Model Classes.
+Uses guzzle/guzzle http client (https://github.com/guzzle/guzzle)
 
 
 
