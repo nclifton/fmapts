@@ -10,28 +10,30 @@
                     <b-navbar-nav class="ml-auto">
 
                         <b-form-select
-                                v-show="!showProduct && regionOrArea==='ar'"
+                                v-show="!showProduct && filterType==='ar'"
                                 v-model="filter.ar"
                                 :options="areaOptions"
                                 size="sm" class="mr-sm-2"
-                                @change="getProducts"
+                                @change="resetProducts"
 
                         ></b-form-select>
 
                         <b-form-select
-                                v-show="!showProduct && regionOrArea==='rg'"
+                                v-show="!showProduct && filterType==='rg'"
                                 v-model="filter.rg"
                                 :options="regionOptions"
                                 size="sm" class="mr-sm-2"
-                                @change="getProducts"
+                                @change="resetProducts"
                         ></b-form-select>
 
                         <b-btn
                                 v-show="showProduct"
                                 variant="light"
                                 type="button"
+                                size="sm"
                                 @click="hideProduct"
-                        >BACK</b-btn>
+                        >BACK
+                        </b-btn>
 
                     </b-navbar-nav>
 
@@ -52,26 +54,12 @@
                         :title="product.productName"
                         :img-src="product.productImage"
                         img-alt="Image"
-                        img-top
+                        img-left
                         tag="article"
                         @click="loadProduct(product)"
                 >
                     <b-card-text>
                         <div class="address" v-for="(address,key) in product.addresses" :key="key">
-                            <div class="address-line">
-                                {{address.address_line}}
-                            </div>
-                            <div class="address-line2" v-show="address.address_line2.length > 0">
-                                {{address.address_line2}}
-                            </div>
-                            <div class="address-line3" v-show="address.address_line3.length > 0">
-                                {{address.address_line3}}
-                            </div>
-                            <div class="address-city-state-postcode d-flex flex-row flex-wrap">
-                                <div class="address-city mr-1">{{address.city}}</div>
-                                <div class="address-state mr-1">{{address.state}}</div>
-                                <div class="address-postcode">{{address.postcode}}</div>
-                            </div>
                             <div class="address-area d-flex flex-row flex-wrap">
                                 <div class="mr-3">Area:</div>
                                 <div v-for="(area,i) in address.area" :key="i" class="mr-1">
@@ -85,9 +73,9 @@
                                 </div>
                             </div>
                         </div>
-                        {{product.productDescription}}
                     </b-card-text>
                 </b-card>
+                <infinite-loading :identifier="infiniteId" @infinite="loadProducts"></infinite-loading>
 
             </div>
 
@@ -97,7 +85,7 @@
                         :title="product.productName"
                         :img-src="product.multimedia[0].serverPath"
                         :img-alt="product.multimedia[0].altText"
-                        img-top
+                        img-left
                         tag="article"
                 >
                     <b-card-text>
@@ -146,6 +134,7 @@
         data() {
             return {
                 products: [],
+                infiniteId: +new Date(),
                 product: {
                     productName: null,
                     multimedia: [{serverPath: null, altText: null}],
@@ -155,6 +144,7 @@
                 showProduct: false,
                 meta: [],
                 filter: {
+                    pge: 1,
                     st: 'NSW',
                     cats: 'ACCOMM',
                     ar: null,
@@ -162,18 +152,25 @@
                 },
                 areaOptions: [],
                 regionOptions: [],
-                regionOrArea: 'rg',
+                filterType: 'rg',
             }
         },
 
         mounted() {
-            this.getProducts();
             this.getAreas();
             this.getRegions();
         },
 
         methods: {
-            getProducts() {
+            loadProducts($state) {
+
+                axios
+                    .get(route('products', this.filter))
+                    .then(response => this.displayProducts(response.data, $state))
+                    .catch(errors => this.handleErrors(errors));
+
+            },
+            resetProducts() {
 
                 // if the selection is one of the ones that switch the select, switch the visible select.
                 if (this.filter.rg === 'ar') {
@@ -184,27 +181,30 @@
                     // switch to region selection
                     this.switchFilter('rg');
 
-                } else {
-
-                    // an area or a region (or neither) has been selected, load the products.
-
-                    axios
-                        .get(route('products', this.filter))
-                        .then(response => this.displayProducts(response))
-                        .catch(errors => this.handleErrors(errors));
                 }
+
+                this.filter.pge = 1;
+                this.products = [];
+                this.infiniteId += 1;
             },
             switchFilter(filter) {
                 this.filter.rg = null;
                 this.filter.ar = null;
-                this.regionOrArea = filter;
+                this.filterType = filter;
             },
             handleErrors(errors) {
                 console.log(errors);
             },
-            displayProducts(response) {
-                this.products = response.data.data;
-                this.meta = response.data.meta
+            displayProducts(data, $state) {
+                if (data.data.length) {
+                    this.filter.pge += 1;
+                    this.products.push(...data.data);
+                    $state.loaded();
+                } else {
+                    $state.complete();
+                }
+                this.meta = data.meta;
+
             },
             getAreas() {
                 axios
@@ -234,7 +234,7 @@
             loadProduct(item) {
 
                 // only request it if we don't already have it
-                if (item.productId !== this.product.productId){
+                if (item.productId !== this.product.productId) {
                     axios
                         .get(route('product', {product: item.productId}))
                         .then(response => {
@@ -247,7 +247,7 @@
                 }
 
             },
-            hideProduct(){
+            hideProduct() {
                 this.showProduct = false;
             }
 
@@ -260,15 +260,31 @@
 
 <style lang="scss" scoped>
 
-    .card.product {
-        max-width: 30em;
-    }
-    .products .card.product{
-        &:hover{
+    .products .card.product {
+        &:hover {
             box-shadow: 0 0 2px 2px #000;
             cursor: pointer;
         }
 
+    }
+    .product .card.product {
+        img{
+            max-width: 30em;
+        }
+    }
+    @supports (grid-area: auto) {
+
+        .product .card.product {
+
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            grid-template-rows: 1fr;
+
+            img{
+                width:100%;
+                max-width: none;
+            }
+        }
     }
 
 </style>

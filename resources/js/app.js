@@ -16,8 +16,12 @@ window.axios.defaults.headers.common = {
 
 import BootstrapVue from 'bootstrap-vue'
 import {loadProgressBar} from 'axios-progress-bar';
+import InfiniteLoading from 'vue-infinite-loading';
+
 
 Vue.use(BootstrapVue);
+Vue.use(InfiniteLoading, { /* options */ });
+
 loadProgressBar();
 
 Vue.mixin({

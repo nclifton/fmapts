@@ -26,6 +26,7 @@
         "webpack": "^4.29.6"
     },
     "dependencies": {
-        "bootstrap-vue": "^2.0.0-rc.16"
+        "bootstrap-vue": "^2.0.0-rc.16",
+        "vue-infinite-loading": "^2.4.3"
     }
 }

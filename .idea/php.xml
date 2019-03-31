@@ -186,6 +186,7 @@
   <component name="PhpUnit">
     <phpunit_settings>
       <phpunit_by_interpreter interpreter_id="f45d8e7a-fb3a-484f-9977-3d99592b3fd0" load_method="CUSTOM_LOADER" custom_loader_path="/var/www/fmapts/vendor/autoload.php" phpunit_phar_path="" />
+      <PhpUnitSettings load_method="CUSTOM_LOADER" configuration_file_path="$PROJECT_DIR$/phpunit.xml" custom_loader_path="$PROJECT_DIR$/vendor/autoload.php" use_configuration_file="true" />
     </phpunit_settings>
   </component>
   <component name="TwigDebugConfiguration">
