@@ -74,7 +74,7 @@ Dockerfile will re-build everything including pulling the source from github.
 This approach should allow things to work if all you have to start with is the Dockerfile.
 I am attempting to create a pre-built image at docker hub, so all you need is:
 
-`docker run -p 80:80 -p 443:443 -dP cliftonwebfoundry/fmapts:latest`
+`docker run --env ATLAS_KEY=123456789101112 -p 80:80 -p 443:443 -dP cliftonwebfoundry/fmapts:latest`
 
 ### docker-compose
 docker-compose uses volumes to share the 'built' project directory with /var/www/html in the docker instance. 
@@ -82,9 +82,9 @@ This assumes you have 'built' the project ... that is, pulled from the github re
 and setup the .env file, ... and created the application key,  and yarn and yarn dev.
 
 ### the .env file
-The only thing in the ,env file you need to know about is the ATLAS_KEY, it needs to be setup with the developer key.
-the example has it in there, not sure if it should, but it lets the Dockerfile build a working image without having to 
-specify it somehow. (I'll look into doing that via the docker run command).
+The only thing in the `.env` file you need to know about is `ATLAS_KEY`, it needs to be setup with the ATLAS developer key.
+The example `.env.example` has it in there, not sure if it should, but it lets the Dockerfile build a working image without having to 
+specify `--env ATLAS_KEY=...` with the `docker run` command.
 
 ### /etc/hosts
 Add fmapts.demo to /etc/hosts for ip 127.0.0.1
