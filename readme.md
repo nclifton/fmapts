@@ -34,6 +34,9 @@ Add fmapts.demo to /etc/hosts for ip 127.0.0.1
 
 https://fmapts.demo
 
+## Laravel
+Built from the standard boilerplate [Laravel][https://laravel.com/].
+
 ## Hey where is the controller?
 
 I see no Fat Controller here (toot toot!).
@@ -45,6 +48,15 @@ And also using a bit of route URI segment binding for the product selection in `
 Uses the Remote Model ORM package (https://github.com/Torann/remote-model) to provide a neat way to encapsulate the 
 ATLAS API interfaces in the Product, Area and Region Model Classes.
 Uses the guzzle/guzzle http client (https://github.com/guzzle/guzzle) to handle the http request/response.
+
+## Caching
+Uses Laravel Cache to reduce the calls to the ATLAS service.
+
+## Client side - Vue.js
+Uses some extra vue.js packages that don't come standard with Laravel
+- https://bootstrap-vue.js.org/ 
+- https://github.com/rikmms/progress-bar-4-axios#readme
+- https://www.npmjs.com/package/vue-infinite-loading
 
 ---
 
