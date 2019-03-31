@@ -35,7 +35,9 @@ RUN source ~/.bashrc && \
 RUN curl -o- -L https://yarnpkg.com/install.sh | bash && echo "" >> ~/.bashrc && echo 'export PATH="$HOME/.yarn/bin:$PATH"' >> ~/.bashrc && source ~/.bashrc
 RUN /root/.yarn/bin/yarn && /root/.yarn/bin/yarn dev
 RUN cp .env.example .env && php artisan key:generate
-RUN chown -R www-data:www-data *
+RUN chown -R www-data:www-data * \
+    && chown -R application:application /var/www/html/storage/logs \
+    && chown -R application:application /var/www/html/storage/framework
 
 WORKDIR /var/www
 
@@ -43,9 +45,6 @@ ENV WEB_DOCUMENT_ROOT=/var/www/html/public
 ENV WEB_DOCUMENT_INDEX=index.php
 ENV WEB_ALIAS_DOMAIN=*.demo
 ENV XDEBUG_REMOTE_HOST="remote_host=host.docker.internal"
-ENV APPLICATION_USER=www-data
-ENV APPLICATION_GROUP=www-data
-ENV APPLICATION_PATH=/var/www/html
 
 EXPOSE 80
 EXPOSE 443
