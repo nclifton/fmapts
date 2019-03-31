@@ -2,7 +2,52 @@
 
 ## About fmapts
 
-fmapts is a web application that uses the Laravel framework and Vue.js to solve the following ...
+fmapts is a web application that uses the Laravel framework and Vue.js.
+I built it as a "tech-test". see [below][Full Stack Lead Developer Test]
+
+
+fmapts is open-source software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## Installation 
+Two docker methods, Dockerfile and docker-compose. Which one you use depends on your local setup.
+
+### Dockerfile
+Dockerfile will re-build everything including pulling the source from github. 
+This approach should allow things to work if all you have to start with is the Dockerfile.
+I am attempting to create a pre-built image at docker hub, so all you need is:
+
+`docker run --env ATLAS_KEY=123456789101112 -p 80:80 -p 443:443 -dP cliftonwebfoundry/fmapts:latest`
+
+### docker-compose
+docker-compose uses volumes to share the 'built' project directory with /var/www/html in the docker instance. 
+This assumes you have 'built' the project ... that is, pulled from the github repository and used composer to fill out the vendor directory,
+and setup the .env file, ... and created the application key,  and yarn and yarn dev.
+
+### the .env file
+The only thing in the `.env` file you need to know about is `ATLAS_KEY`, it needs to be setup with the ATLAS developer key.
+The example `.env.example` has it in there, not sure if it should, but it lets the Dockerfile build a working image without having to 
+specify `--env ATLAS_KEY=...` with the `docker run` command.
+
+### /etc/hosts
+Add fmapts.demo to /etc/hosts for ip 127.0.0.1
+
+### start it up
+
+https://fmapts.demo
+
+## Hey where is the controller?
+
+I see no Fat Controller here (toot toot!).
+
+Instead of using a controller I've just put the little bit of stuff there is in the route file  `routes/api.php`
+And also using a bit of route URI segment binding for the product selection in `app/Providers/RouteServiceProvider.php`.
+
+
+
+
+---
+
+
 
 # Full Stack Lead Developer Test
 ## Purpose
@@ -62,42 +107,5 @@ Additional consideration will be given for:
 * Loading all content and filtering in the frontend is not an option
 due to the
 volume
-
-
-fmapts is open-source software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-
-## Installation 
-Two docker methods, Dockerfile and docker-compose. Which one you use depends on your local setup.
-
-### Dockerfile
-Dockerfile will re-build everything including pulling the source from github. 
-This approach should allow things to work if all you have to start with is the Dockerfile.
-I am attempting to create a pre-built image at docker hub, so all you need is:
-
-`docker run --env ATLAS_KEY=123456789101112 -p 80:80 -p 443:443 -dP cliftonwebfoundry/fmapts:latest`
-
-### docker-compose
-docker-compose uses volumes to share the 'built' project directory with /var/www/html in the docker instance. 
-This assumes you have 'built' the project ... that is, pulled from the github repository and used composer to fill out the vendor directory,
-and setup the .env file, ... and created the application key,  and yarn and yarn dev.
-
-### the .env file
-The only thing in the `.env` file you need to know about is `ATLAS_KEY`, it needs to be setup with the ATLAS developer key.
-The example `.env.example` has it in there, not sure if it should, but it lets the Dockerfile build a working image without having to 
-specify `--env ATLAS_KEY=...` with the `docker run` command.
-
-### /etc/hosts
-Add fmapts.demo to /etc/hosts for ip 127.0.0.1
-
-### start it up
-
-https://fmapts.demo
-
-## Hey where is the controller?
-
-I see no Fat Controller here (toot toot!).
-
-Instead of using a controller I've just put the little bit of stuff there is in the route file  `routes/api.php`
-And also using a bit of route URI segment binding for the product selection in `app/Providers/RouteServiceProvider.php`.
 
 
