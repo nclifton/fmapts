@@ -65,3 +65,18 @@ volume
 
 
 fmapts is open-source software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## Installation 
+Two docker methods, Dockerfile and docker-compose.
+
+Dockerfile will re-build everything including pulling the source from github. 
+This approach should allow things to work if all you have to start with is the Dockerfile.
+
+docker-compose uses volumes to share the project directory with /var/www/html in the docker instance. 
+This assumes you have already pulled from the github repository and used composer to fill out the vendor directory,
+and setup the .env file, ... and created the application key
+
+### the .env file
+the only thing in the ,env file you need to know about is the ATLAS_KEY, it needs to be setup with the developer key.
+I don't know how much of a secret this supposed to be. So I've removed it from the latest repository code.
+

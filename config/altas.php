@@ -2,6 +2,6 @@
 
 
 return [
-    'key' => '123456789101112'
+    'key' => env('ATLAS_KEY')
 
 ];
