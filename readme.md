@@ -44,9 +44,7 @@ And also using a bit of route URI segment binding for the product selection in `
 ## Remote Model
 Uses the Remote Model ORM package (https://github.com/Torann/remote-model) to provide a neat way to encapsulate the 
 ATLAS API interfaces in the Product, Area and Region Model Classes.
-Uses guzzle/guzzle http client (https://github.com/guzzle/guzzle)
-
-
+Uses the guzzle/guzzle http client (https://github.com/guzzle/guzzle) to handle the http request/response.
 
 ---
 
