@@ -19,42 +19,51 @@ use Illuminate\Http\Request;
 
 Route::get('products',function(Request $request){
 
-
-    // todo setup caching here with the resource collection instead of the product model collection because a product
-    // model with the same id will contain different attribute naming depending on which endpoint was used. For example
-    // a product model created from the products search endpoint will have different address attribute names to a
-    // product model created from the product find endpoint. So we will cache the page - collection of products against
-    // the filter/query instead of caching individual products against product ids.
-    // Ideally we could map the two endpoint "product" attribute sets into a common product attribute set for thr
-    // created model, but that would be a lot of work for little gain at this time.
-
-    $all = Product::all($request->query->all());
-
-    return Resources\Product::collection($all);
+    $filter             = $request->query->all();
+    $key                = 'products::' . serialize($filter);
+    $resourceCollection = Cache::get($key, function() use ($key,$filter){
+        $resourceCollection = Resources\Product::collection(Product::all($filter));
+        \Log::debug('adding to cache '.$key);
+        Cache::put($key,$resourceCollection,now()->addMinutes(60));
+        return $resourceCollection;
+    });
+    return $resourceCollection;
 
 })->name('products');
 
 Route::get('areas',function(Request $request){
 
-    // todo setup resource caching here
-
-    return Resources\Area::collection(Area::all($request->query->all()));
+    $filter             = $request->query->all();
+    $key                = 'areas::' . serialize($filter);
+    $resourceCollection = Cache::get($key, function() use ($key,$filter){
+        $resourceCollection = Resources\Area::collection(Area::all($filter));
+        \Log::debug('adding to cache '.$key);
+        Cache::put($key,$resourceCollection,now()->addMinutes(60));
+        return $resourceCollection;
+    });
+    return $resourceCollection;
 
 })->name('areas');
 
 Route::get('regions',function(Request $request){
 
-    // todo setup resource caching here
+    $filter = $request->query->all();
+    $key                = 'regions::' . serialize($filter);
+    $resourceCollection = Cache::get($key, function() use ($key,$filter){
+        $resourceCollection = Resources\Region::collection(Region::all($filter));
+        \Log::debug('adding to cache '.$key);
+        Cache::put($key,$resourceCollection,now()->addMinutes(60));
+        return $resourceCollection;
+    });
 
-    return Resources\Region::collection(Region::all($request->query->all()));
+    return $resourceCollection;
 
 })->name('regions');
 
 Route::get('product/{product}',function(Product $product){
 
-    // todo setup resource caching here
-
-    return Resources\Product::make($product);
+    $resource = Resources\Product::make($product);
+    return $resource;
 
 })->name('product');
 

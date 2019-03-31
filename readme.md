@@ -67,16 +67,37 @@ volume
 fmapts is open-source software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
 ## Installation 
-Two docker methods, Dockerfile and docker-compose.
+Two docker methods, Dockerfile and docker-compose. Which one you use depends on your local setup.
 
+### Dockerfile
 Dockerfile will re-build everything including pulling the source from github. 
 This approach should allow things to work if all you have to start with is the Dockerfile.
+I am attempting to create a pre-built image at docker hub, so all you need is:
 
-docker-compose uses volumes to share the project directory with /var/www/html in the docker instance. 
-This assumes you have already pulled from the github repository and used composer to fill out the vendor directory,
-and setup the .env file, ... and created the application key
+`docker run -p 80:80 -p 443:443 -dP cliftonwebfoundry/fmapts:latest`
+
+### docker-compose
+docker-compose uses volumes to share the 'built' project directory with /var/www/html in the docker instance. 
+This assumes you have 'built' the project ... that is, pulled from the github repository and used composer to fill out the vendor directory,
+and setup the .env file, ... and created the application key,  and yarn and yarn dev.
 
 ### the .env file
-the only thing in the ,env file you need to know about is the ATLAS_KEY, it needs to be setup with the developer key.
-I don't know how much of a secret this supposed to be. So I've removed it from the latest repository code.
+The only thing in the ,env file you need to know about is the ATLAS_KEY, it needs to be setup with the developer key.
+the example has it in there, not sure if it should, but it lets the Dockerfile build a working image without having to 
+specify it somehow. (I'll look into doing that via the docker run command).
+
+### /etc/hosts
+Add fmapts.demo to /etc/hosts for ip 127.0.0.1
+
+### start it up
+
+https://fmapts.demo
+
+## Hey where is the controller?
+
+I see no Fat Controller here (toot toot!).
+
+Instead of using a controller I've just put the little bit of stuff there is in the route file  `routes/api.php`
+And also using a bit of route URI segment binding for the product selection in `app/Providers/RouteServiceProvider.php`.
+
 

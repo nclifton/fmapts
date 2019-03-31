@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Product;
+use Cache;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
@@ -28,8 +29,18 @@ class RouteServiceProvider extends ServiceProvider
 
         parent::boot();
 
-        Route::bind('product', function ($value) {
-            return Product::find($value) ?? abort(404);
+        Route::bind('product', function ($productId) {
+
+            $key = 'product::' . $productId;
+            return Cache::get($key,
+                function () use ($productId, $key) {
+                    $product = Product::find($productId) ?? abort(404);
+                    \Log::debug('adding to cache '.$key);
+                    Cache::put($key, $product, now()->addMinutes(60));
+                    return $product;
+                }
+            );
+
         });
     }
 
@@ -58,7 +69,8 @@ class RouteServiceProvider extends ServiceProvider
     {
         Route::middleware('web')
              ->namespace($this->namespace)
-             ->group(base_path('routes/web.php'));
+             ->group(base_path('routes/web.php'))
+        ;
     }
 
     /**
@@ -73,6 +85,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::prefix('api')
              ->middleware('api')
              ->namespace($this->namespace)
-             ->group(base_path('routes/api.php'));
+             ->group(base_path('routes/api.php'))
+        ;
     }
 }
