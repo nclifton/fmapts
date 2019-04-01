@@ -64,17 +64,15 @@ that interacts with the service routes provided by the web service.
 Hopefully the UI is intuitive.
 
 ## API Routes
-There are four routes serviced by the web service:
+There are four API routes serviced by the web service and the root route:
 
-+--------+----------+-----------------------+----------+---------+------------+
-| Domain | Method   | URI                   | Name     | Action  | Middleware |
-+--------+----------+-----------------------+----------+---------+------------+
-|        | GET|HEAD | /                     |          | Closure | web        |
-|        | GET|HEAD | api/areas             | areas    | Closure | api        |
-|        | GET|HEAD | api/product/{product} | product  | Closure | api        |
-|        | GET|HEAD | api/products          | products | Closure | api        |
-|        | GET|HEAD | api/regions           | regions  | Closure | api        |
-+--------+----------+-----------------------+----------+---------+------------+
+  Domain | Method   | URI                   | Name     | Action  | Middleware
+---------|----------|-----------------------|----------|---------|------------
+         | GET|HEAD | /                     |          | Closure | web        
+         | GET|HEAD | api/areas             | areas    | Closure | api        
+         | GET|HEAD | api/product/{product} | product  | Closure | api        
+         | GET|HEAD | api/products          | products | Closure | api        
+         | GET|HEAD | api/regions           | regions  | Closure | api        
 
 
 ---
