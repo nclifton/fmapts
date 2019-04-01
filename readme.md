@@ -35,7 +35,7 @@ Add fmapts.demo to /etc/hosts for ip 127.0.0.1
 https://fmapts.demo
 
 ## Laravel
-Built from the standard boilerplate [Laravel][https://laravel.com/].
+Built from the standard boilerplate [Laravel](https://laravel.com/).
 
 ## Hey where is the controller?
 
@@ -54,9 +54,28 @@ Uses Laravel Cache to reduce the calls to the ATLAS service.
 
 ## Client side - Vue.js
 Uses some extra vue.js packages that don't come standard with Laravel
-- https://bootstrap-vue.js.org/ 
-- https://github.com/rikmms/progress-bar-4-axios#readme
-- https://www.npmjs.com/package/vue-infinite-loading
+- [bootstrap-vue](https://bootstrap-vue.js.org/) 
+- [progress-bar-4-axios](https://github.com/rikmms/progress-bar-4-axios#readme)
+- [vue-infinite-loading](https://github.com/PeachScript/vue-infinite-loading)
+
+There is only the one Vue component - [MainComponent](https://github.com/nclifton/fmapts/blob/master/resources/js/components/MainComponent.vue) 
+that interacts with the service routes provided by the web service.
+
+Hopefully the UI is intuitive.
+
+## API Routes
+There are four routes serviced by the web service:
+
++--------+----------+-----------------------+----------+---------+------------+
+| Domain | Method   | URI                   | Name     | Action  | Middleware |
++--------+----------+-----------------------+----------+---------+------------+
+|        | GET|HEAD | /                     |          | Closure | web        |
+|        | GET|HEAD | api/areas             | areas    | Closure | api        |
+|        | GET|HEAD | api/product/{product} | product  | Closure | api        |
+|        | GET|HEAD | api/products          | products | Closure | api        |
+|        | GET|HEAD | api/regions           | regions  | Closure | api        |
++--------+----------+-----------------------+----------+---------+------------+
+
 
 ---
 

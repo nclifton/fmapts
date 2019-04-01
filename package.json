@@ -23,10 +23,11 @@
         "sass-loader": "^7.1.0",
         "vue": "^2.6.10",
         "vue-template-compiler": "^2.6.10",
-        "webpack": "^4.29.6"
-    },
-    "dependencies": {
+        "webpack": "^4.29.6",
         "bootstrap-vue": "^2.0.0-rc.16",
         "vue-infinite-loading": "^2.4.3"
+    },
+    "dependencies": {
+
     }
 }
